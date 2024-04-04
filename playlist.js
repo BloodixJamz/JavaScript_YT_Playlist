@@ -1,8 +1,14 @@
 // ** Importer les modules **
 const db = require('./db');
-const app = require('./app');
 
+let configFile = null;
 
+try {
+    // Config contains credentials and api keys
+    configFile = require('./config');
+} catch (error) {
+    console.log('You need to create a config.js file or change the apiKey directly in the functions in file : playlist.js');
+}
 
 
 /** Get Songs
@@ -188,7 +194,10 @@ async function addSong(req, res) {
 async function fetchVideoTitle(videoId, callback) {
     try {
 
-        var apiKey = 'your_google_api_key';
+        // **** You need to change the apiKey ****
+        var apiKey = configFile.config.apiKey;
+
+
         var apiUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + videoId + '&key=' + apiKey + '&part=snippet';
 
         return fetch(apiUrl)

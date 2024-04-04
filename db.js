@@ -2,6 +2,14 @@
 //const { promises } = require("dns");
 const mysql = require("mysql");
 
+let configFile = null;
+
+try {
+    // Config contains credentials and api keys
+    configFile = require('./config');
+} catch (error) {
+    console.log('You need to create a config.js file or change the credentials directly in the functions in file : db.js');
+}
 
 
 
@@ -15,20 +23,21 @@ const mysql = require("mysql");
  * @returns {mysql.Connection} The connexion object ready to be manipulated
  */
 function returnViewConn() {
-    // Database credentials here (Read only)
+
+    // **** Database credentials here (Read only) ****
+
     const conn = mysql.createConnection({
-        user: 'your_username',
-        password: 'your_password',
-        server: 'localhost',
-        database: 'your_db_name'
+        user: configFile.config.userView,
+        password: configFile.config.passwordView,
+        server: configFile.config.server,
+        database: configFile.config.database
     });
 
-    // Se connecter a la base de donnée
+    // Connect to database
     conn.connect((err) => {
         if (err) 
         {
-            //return console.error('Error connecting to MySQL database: ' + err.stack);
-            throw new Error('Error connecting to MySQL database'); 
+            return console.error('Error connecting to MySQL database: ' + err.stack);
         }
 
         return console.log('Connected to MySQL database as id ' + conn.threadId);
@@ -46,20 +55,22 @@ function returnViewConn() {
  * @returns {mysql.Connection} The connexion object ready to be manipulated
  */
 function returnPrivConn() {
-    // Database credentials here (Privileges)
+
+    // **** Database credentials here (Privileges) ****
+
     const conn = mysql.createConnection({
-        user: 'your_username',
-        password: 'your_password',
-        server: 'localhost',
-        database: 'your_db_name'
+        user: configFile.config.userPriv,
+        password: configFile.config.passwordPriv,
+        server: configFile.config.server,
+        database: configFile.config.database
     });
 
-    // Se connecter a la base de donnée
+    // Connect to database
+
     conn.connect((err) => {
         if (err) 
         {
-            //return console.error('Error connecting to MySQL database: ' + err.stack);
-            throw new Error('Error connecting to MySQL database'); 
+            return console.error('Error connecting to MySQL database: ' + err.stack);
         }
 
         return console.log('Connected to MySQL database as id ' + conn.threadId);
@@ -75,14 +86,13 @@ function returnPrivConn() {
  * Close an open connexion to db
  * Will throw a new error if closing connexion is not successful
  * @param {mysql.Connection} conn The connexion object ready to be closed
- * @returns {console.log, Error} Will either log if successful or throw an Error if not
+ * @returns {console.log} Will log if either successful or Error
  */
 function closeConn(conn) {
-    // Fermer la connection
+    // Close connection
     conn.end((err) => {
         if (err) {
-            //return console.error('Error closing MySQL connection: ' + err.stack);
-            throw new Error('Error closing MySQL connection'); 
+            return console.error('Error closing MySQL connection: ' + err.stack);
         }
 
         return console.log('MySQL connection closed.');
