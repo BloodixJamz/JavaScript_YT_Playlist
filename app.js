@@ -45,22 +45,23 @@ app.use(express.json());
 
 //*********************** PLAYLIST *******************************
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
     // Get the current session, if not it returns null
     const currSession = session.returnSession();
 
 
     if (currSession){
         //console.log(currSession);
-        playlist.getSongs(req, res, currSession);
+        //const results = await playlist.getSongs(req, res, currSession);
+        //res.render('playlist', { songs : results, session : session });
+
+        playlist.playlistRedirect(res, null);
     }
     else{
         //console.log(currSession);
         res.render('login');
     }
-    //res.render('playlist'); // , { }
 });
-
 
 
 // OLD METHOD OF RETRIEVING SONGS

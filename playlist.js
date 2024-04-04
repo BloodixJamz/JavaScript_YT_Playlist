@@ -1,6 +1,10 @@
 // ** Importer les modules **
 const db = require('./db');
+const session = require('./session');
 
+
+
+// Check if the config file exists
 let configFile = null;
 
 try {
@@ -11,20 +15,45 @@ try {
 }
 
 
+
+
+/** Redirect on Playlist Template
+ * Redirect user on Playlist with all the parameters
+ * render template playlist with parameters
+ * @param {number} res HTTP response
+ * @param {string} message Error message for the user or null
+ * @returns render template playlist with parameters
+ */
+async function playlistRedirect(res, message) {
+    const currSession = session.returnSession();
+    const results = await getSongs(res, currSession);
+
+    if (message)
+    {
+        res.render('playlist', { songs : results, session : currSession, message: message })
+    }
+    else
+    {
+        res.render('playlist', { songs : results, session : currSession })
+    }
+}
+
+
+
 /** Get Songs
  * Retrieve songs infos from the database
  * Will return an error 500 if it cant return data
- * @param {number} req HTTP request
  * @param {number} res HTTP response
  * @returns Json Object containing songs infos
  */
-function getSongs(req, res, session) {
-    // fetchDB is a promise --> PARAM : SQL QUERY
-    // ** If using fetchMusic --> Remove video_id from query **
+async function getSongs(res, session) {
+    // 
+
+    // ** OLD FETCHING :  If using fetchMusic --> Remove video_id from query // fetchDB is a promise --> PARAM : SQL QUERY **
     let promise = db.fetchDB('SELECT id, author, name, video_url, video_id FROM music_playlist;');
     //console.log("Awaiting Promise.");
 
-    promise.then(
+    return promise.then(
         function(value) { 
             /* code if successful */ 
 
@@ -38,7 +67,11 @@ function getSongs(req, res, session) {
 
                 console.log("Successfully retrieved music playlist");
                 //console.log(results);
-                res.render('playlist', { songs : results, session : session });
+
+                //playlistRedirect(res, results, null);
+                //res.render('playlist', { songs : results, session : session });
+
+                return results;
             }
         })
     .catch((error) => {
@@ -123,6 +156,9 @@ function getVideoID(req, res) {
 
 
 
+
+
+
 /** Insert Songs
  * Insert new song in database
  * Will return an error 500 if it cant return data
@@ -139,9 +175,17 @@ async function addSong(req, res) {
 
         if (!formData || !formData.video_url)
         {
+            playlistRedirect(res, "video_url parameter does not exists, is undefined or null.");
             return console.log("video_url parameter does not exists, is undefined or null.");
         }
 
+        if (!isValidUrlWWW(formData.video_url))
+        {
+            playlistRedirect(res, "Please enter a valid HTML address starting with 'https://'");
+            return console.log("Please enter a valid HTML address starting with 'https://'");
+        }
+
+        
         // Retrieving the video id from url
         const video_id = await extractIdFromURL(formData.video_url);
 
@@ -149,7 +193,7 @@ async function addSong(req, res) {
         console.log(video_title);
 
         // Splitting artist and song name from video title
-        const infosArray = extractInfosFromTitle(video_title);
+        const infosArray = await extractInfosFromTitle(video_title);
 
         console.log(infosArray);
 
@@ -190,13 +234,36 @@ async function addSong(req, res) {
 
 
 
-// Function to fetch video title using YouTube Data API
-async function fetchVideoTitle(videoId, callback) {
+
+
+/** Validate input URL
+ * Check if URL is valid
+ * Will return an error 500 if it cant return data
+ * @param {string} url Youtube URL adress
+ * @returns {string} true or false
+ */
+function isValidUrlWWW(url) {
+    // Simple URL validation, you can enhance it based on your requirements
+    var urlPattern = /^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/[^\s]*)?$/;
+    return urlPattern.test(url);
+}
+
+
+
+
+
+
+/** Fetch Video Title
+ * Function to fetch video title using YouTube Data API
+ * Will return an error or null if it cant return data
+ * @param {string} videoId Video ID in the Youtube URL
+ * @returns {string} data, null
+ */
+async function fetchVideoTitle(videoId) {
     try {
 
         // **** You need to change the apiKey ****
         var apiKey = configFile.config.apiKey;
-
 
         var apiUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' + videoId + '&key=' + apiKey + '&part=snippet';
 
@@ -221,7 +288,14 @@ async function fetchVideoTitle(videoId, callback) {
 
 
 
-function extractIdFromURL(url) {
+
+/** Extract ID from URL
+ * Extract Youtube Video ID from the URL
+ * Will return an error or null if it cant return data
+ * @param {string} url Youtube URL
+ * @returns {string} The video id from URL
+ */
+async function extractIdFromURL(url) {
     //console.log(url);
 
     if (url)
@@ -239,7 +313,14 @@ function extractIdFromURL(url) {
 
 
 // ref : https://stackoverflow.com/questions/10992921/how-to-remove-emoji-code-using-javascript
-function extractInfosFromTitle(title) {
+
+/** Extract Infos from Title
+ * Split the infos from the complete Youtube Title
+ * Will return the infos as an Array or undefined
+ * @param {string} title Youtube Video Title
+ * @returns {array} The video Infos splitted into an array
+ */
+async function extractInfosFromTitle(title) {
     //console.log(url);
 
     if (title)
@@ -260,6 +341,17 @@ function extractInfosFromTitle(title) {
 
 
 
+
+
+/** Song Constructor
+ * Create an Song Object to manipulate, ex: push song into the db.
+ * Allow to return the infos or push song into db
+ * @param {string} video_id Youtube video ID
+ * @param {string} video_url Youtube video URL
+ * @param {string} author Youtube video author
+ * @param {string} song_name Youtube video Song name
+ * @returns {function} Allow to call functions to either print infos or push song into db
+ */
 class SongConstructor {
     constructor(video_id, video_url, author, song_name){
         this.video_id = video_id;
@@ -293,6 +385,7 @@ function redirect(res, url) {
     if (url){
         //setTimeout(res.redirect(301, url), 5000);
         res.redirect(301, url);
+        
     }
     else{
         res.status(404).send('Missing URL/not found in redirection.');
@@ -301,4 +394,4 @@ function redirect(res, url) {
 
 
 
-module.exports = { getSongs, addSong, getVideoID, deleteSong };
+module.exports = { getSongs, addSong, getVideoID, deleteSong, playlistRedirect };

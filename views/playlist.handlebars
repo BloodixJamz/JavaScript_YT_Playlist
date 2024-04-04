@@ -8,6 +8,9 @@
     <button class="btn-playlist" id="next">Next</button>
 </p>
 
+{{#if message}} 
+    <p>{{this.message}}</p>
+{{/if}}
 <form method="post" action="/api/add_song">
     <label for="video_url">Insert a Youtube link and click on Add Song to insert it in the list.</label>
     <input type="text" id="video_url" name="video_url">

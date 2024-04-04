@@ -5,15 +5,22 @@ const db = require('./db');
 // Keep track of the current session (user)
 let currSession = null;
 
+
+
 function returnSession()
 {
     return currSession;
 }
 
+
+
 function closeSession()
 {
     currSession = null;
 }
+
+
+
 
 
 
@@ -33,6 +40,9 @@ class Users{
         return values;
     }
 }
+
+
+
 
 
 
@@ -73,7 +83,7 @@ function loginUser(req, res) {
 
 
     // fetchDB is a promise --> PARAM : SQL QUERY
-    let promise = db.fetchDB('SELECT username, password FROM utilisateurs WHERE username = ?;', username);
+    let promise = db.fetchDB('SELECT username, password FROM users WHERE username = ?;', username);
     //console.log("Awaiting Promise.");
 
     promise.then(

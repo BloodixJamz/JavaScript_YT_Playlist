@@ -2,6 +2,8 @@
 //const { promises } = require("dns");
 const mysql = require("mysql");
 
+
+// Check if the config file exists
 let configFile = null;
 
 try {
@@ -23,27 +25,32 @@ try {
  * @returns {mysql.Connection} The connexion object ready to be manipulated
  */
 function returnViewConn() {
+    try {
 
-    // **** Database credentials here (Read only) ****
+        // **** Database credentials here (Read only) ****
 
-    const conn = mysql.createConnection({
-        user: configFile.config.userView,
-        password: configFile.config.passwordView,
-        server: configFile.config.server,
-        database: configFile.config.database
-    });
+        const conn = mysql.createConnection({
+            user: configFile.config.userView,
+            password: configFile.config.passwordView,
+            server: configFile.config.server,
+            database: configFile.config.database
+        });
 
-    // Connect to database
-    conn.connect((err) => {
-        if (err) 
-        {
-            return console.error('Error connecting to MySQL database: ' + err.stack);
-        }
+        // Connect to database
+        conn.connect((err) => {
+            if (err) 
+            {
+                return console.error('Error connecting to MySQL database: ' + err.stack);
+            }
 
-        return console.log('Connected to MySQL database as id ' + conn.threadId);
-    });
+            return console.log('Connected to MySQL database as id ' + conn.threadId);
+        });
 
-    return conn;
+        return conn;
+    } 
+    catch (error) {
+        return console.error('Error connecting to MySQL database: ' + error);
+    }
 }
 
 
@@ -55,28 +62,32 @@ function returnViewConn() {
  * @returns {mysql.Connection} The connexion object ready to be manipulated
  */
 function returnPrivConn() {
+    try {
 
-    // **** Database credentials here (Privileges) ****
+        // **** Database credentials here (Privileges) ****
+        const conn = mysql.createConnection({
+            user: configFile.config.userPriv,
+            password: configFile.config.passwordPriv,
+            server: configFile.config.server,
+            database: configFile.config.database
+        });
 
-    const conn = mysql.createConnection({
-        user: configFile.config.userPriv,
-        password: configFile.config.passwordPriv,
-        server: configFile.config.server,
-        database: configFile.config.database
-    });
+        // Connect to database
 
-    // Connect to database
+        conn.connect((err) => {
+            if (err) 
+            {
+                return console.error('Error connecting to MySQL database: ' + err.stack);
+            }
 
-    conn.connect((err) => {
-        if (err) 
-        {
-            return console.error('Error connecting to MySQL database: ' + err.stack);
-        }
+            return console.log('Connected to MySQL database as id ' + conn.threadId);
+        });
 
-        return console.log('Connected to MySQL database as id ' + conn.threadId);
-    });
-
-    return conn;
+        return conn;
+    } 
+    catch (error) {
+        return console.error('Error connecting to MySQL database: ' + error);
+    }
 }
 
 

@@ -3,7 +3,7 @@
 You can add songs using the Youtube Links and they get displayed into a table below the YT iframe.
 
 
-Dependancies : node.js, express, mysql and handlebars.
+Dependencies : node.js, express, mysql and handlebars.
 
 
 ***** You will need to create a 'config.js' file containing the following : *****
@@ -27,6 +27,27 @@ module.exports = { config };
 
 *********************************************************************************
 
+***** You will need to create a SQL database containing the following : *****
+
+Table : 'music_playlist' 
+
+Rows : 
+ - 'id' (auto-inc int),
+ - 'video_id' (varchar 255),
+ - 'video_url' (varchar 255),
+ - 'author' (varchar 255)
+ - 'name' (varchar 255).
+
+------------------------
+
+Table : 'users' 
+
+Rows : 
+ - 'id' (auto-inc int),
+ - 'username' (varchar 20),
+ - 'password' (varchar 30),
+
+*****************************************************************************
 ------------------------------------------------------------------------------------------------
 
 ***** What does it do ? *****
