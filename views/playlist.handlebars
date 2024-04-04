@@ -35,7 +35,7 @@
                 <td>{{this.author}}</td>
                 <td>{{this.name}}</td>
                 <td>{{this.video_url}}</td>
-                <td><button onclick="deleteSong({{this.id}})" class="danger">Del</button></td>
+                <td><form action="/"><button onclick="deleteSong({{this.id}})" class="danger" type="submit">Del</button></form></td>
             </tr>
         {{/each}}
     </table>

@@ -115,9 +115,6 @@ function deleteSong(req, res) {
         // Handle the error and send an error response
         res.status(500).json({ error: 'Internal server error' });
     });
-
-
-    redirect(res, '/');
 }
 
 
@@ -326,7 +323,9 @@ async function extractInfosFromTitle(title) {
     if (title)
     {
         let infosArray = [];
-        const titleArray = title.split("-");
+        const titleArray = title.split(/ - /gm);
+
+        //const titleArray = title.split(" - "); // This might cause an error if author contains '-'
 
         titleArray[0] = titleArray[0].replace(/[^\p{L}\p{N}\p{P}\p{Z}^$\n]/gu, '');
         titleArray[1] = titleArray[1].replace(/[^\p{L}\p{N}\p{P}\p{Z}^$\n]/gu, '');
