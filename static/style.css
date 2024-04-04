@@ -1,0 +1,139 @@
+html {
+    background-color: rgb(27, 26, 25);
+    color: white;
+}
+
+body{
+    text-align: center;
+}
+
+
+
+ul {
+    display: inline-block;
+    text-align:left;
+}
+
+label{
+    padding-top: 1rem;
+    display: block;
+    font-size: larger;
+}
+
+input{
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    background-color: #ffffff;
+    border-radius: 5px;
+    border: 1px solid rgba(27, 31, 35, .15);
+    font-size: large;
+}
+
+
+
+
+
+
+/* ref : https://www.w3schools.com/html/tryit.asp?filename=tryhtml_table_intro */
+table {
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: auto;
+
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td, th {
+    border: 1px solid black;
+    text-align: left;
+    padding: 8px;
+}
+
+th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    border-color: black;
+    background-color: #0e0e0e;
+}
+
+tr:nth-child(even) {
+    background-color: #252525;
+
+    cursor: pointer;
+}
+
+tr:nth-child(odd) {
+    background-color: #414141;
+
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+/*  BUTTONS  */
+.btn-playlist {
+    cursor: pointer;
+    font-weight: 0.3rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    font-size: large;
+}
+
+
+.btn-form {
+    cursor: pointer;
+    font-weight: 0.3rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    font-size: large;
+}
+
+
+.btn {
+    margin-top: 1rem;
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    font-weight: 0.3rem;
+    padding: 0.5rem;
+
+    border-radius: 0.5rem;
+    font-size: large;
+}
+
+.primary, .btn-form
+{
+    border: 0.1rem solid #0c185a;
+    background-color: #3852e4;
+}
+
+.primary:hover, .btn-form:hover
+{
+    border: 0.1rem solid #081249;
+    background-color: #253bb8;
+}
+
+
+.danger
+{
+    border: 0.1rem solid #5a0c0c;
+    background-color: #e43838;
+}
+
+.danger:hover
+{
+    border: 0.1rem solid #410909;
+    background-color: #d32727;
+}

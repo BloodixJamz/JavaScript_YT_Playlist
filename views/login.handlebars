@@ -1,0 +1,31 @@
+
+{{#if session}}
+    <h1>Welcome {{session.username}}</h1>
+
+    <button class="btn danger" onclick="window.location.href = '/logout';">Logout</button>
+
+    <button class="btn" onclick="window.location.href = '/';">Playlist</button>
+
+    <div id="dataDisplay"></div>
+
+    <script type="text/javascript">
+            // Call the fetchData function when the page loads
+            //fetchMusic("/api/playlist");
+    </script>
+{{else}}
+    <h1>Login</h1>
+
+    {{#if message}}
+            <p>{{ message }}</p>
+    {{/if}}
+
+    <form method="post" action="/api/login">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+
+        <button class="btn primary" type="submit">Submit</button>
+    </form>
+{{/if}}

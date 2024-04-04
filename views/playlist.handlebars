@@ -1,0 +1,48 @@
+<h1>My Playlist</h1>
+<div id="curr_playing"></div>
+<div id="player"></div>
+
+<p>
+    <button class="btn-playlist" id="play">Play</button>
+    <button class="btn-playlist" id="pause">Pause</button>
+    <button class="btn-playlist" id="next">Next</button>
+</p>
+
+<form method="post" action="/api/add_song">
+    <label for="video_url">Insert a Youtube link and click on Add Song to insert it in the list.</label>
+    <input type="text" id="video_url" name="video_url">
+    <button class="btn-form" type="submit">Add song</button>
+</form>
+
+<button class="btn" onclick="window.location.href = '/login';">Login</button>
+
+{{#if songs}} 
+    <table> 
+        <tr>
+            <th>ID</th>
+            <th>Author</th>
+            <th>Name</th>
+            <th>Video URL</th>
+            <th>Delete</th>
+        </tr>
+
+        {{#each songs}}
+            <tr onclick='playNextVideo("{{this.video_id}}");'>
+                <td>{{this.id}}</td>
+                <td>{{this.author}}</td>
+                <td>{{this.name}}</td>
+                <td>{{this.video_url}}</td>
+                <td><button onclick="deleteSong({{this.id}})" class="danger">Del</button></td>
+            </tr>
+        {{/each}}
+    </table>
+{{else}}
+    <p>There is currently no songs in your youtube playlist.</p>
+{{/if}}
+
+<!-- THIS IS THE OLD WAY TO RETRIEVE DATA -->
+<div id="dataDisplay"></div>
+<script type="text/javascript">
+        // Call the fetchData function when the page loads
+        //fetchMusic("/api/playlist");
+</script>
