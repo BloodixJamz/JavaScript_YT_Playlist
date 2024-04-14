@@ -101,8 +101,8 @@ function loginUser(req, res) {
                 {
                     currSession = new Session(usernameDB);
 
-                    console.log("Successfully logged in"); 
-                    currSession.info();
+                    console.log("Successfully logged in, "+ usernameDB); 
+                    //currSession.info();
 
                     res.render('login', { session: currSession })
                     return;

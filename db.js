@@ -43,7 +43,7 @@ function returnViewConn() {
                 return console.error('Error connecting to MySQL database: ' + err.stack);
             }
 
-            return console.log('Connected to MySQL database as id ' + conn.threadId);
+            //return console.log('Connected to MySQL database as id ' + conn.threadId);
         });
 
         return conn;
@@ -80,7 +80,7 @@ function returnPrivConn() {
                 return console.error('Error connecting to MySQL database: ' + err.stack);
             }
 
-            return console.log('Connected to MySQL database as id ' + conn.threadId);
+            //return console.log('Connected to MySQL database as id ' + conn.threadId);
         });
 
         return conn;
@@ -106,7 +106,7 @@ function closeConn(conn) {
             return console.error('Error closing MySQL connection: ' + err.stack);
         }
 
-        return console.log('MySQL connection closed.');
+        //return console.log('MySQL connection closed.');
     });
 }
 

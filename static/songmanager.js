@@ -39,13 +39,12 @@ function onYouTubeIframeAPIReady(video_id) {
 async function onPlayerReady(event) {
     event.target.playVideo();
 
-    // Raise the count since first song is playing
-    listenedCount ++;
     // Get next video id and insert it in next button
     let next_video_id = await returnNextSongID();
     initButton(next_video_id);
+    
 
-    setTimeout(updateTitle(), 50000);
+    updateTitle();
 }
 
 
@@ -55,11 +54,10 @@ async function onPlayerReady(event) {
 
 // The API will call this function when the player's state changes.
 async function onPlayerStateChange(event) {
-    if (event.data == YT.PlayerState.ENDED) {
+    if (event.data === YT.PlayerState.ENDED) {
         let next_video_id = await returnNextSongID();
-
         playNextVideo(next_video_id);
-
+        console.log("Song ended.");
     }
 
 
@@ -87,19 +85,19 @@ async function onPlayerStateChange(event) {
 async function playNextVideo(new_video_id) {
     player.loadVideoById(new_video_id);
 
-    // Raise the count since song is finished
-    listenedCount ++;
     // Get next video id and insert it in next button
     let next_video_id = await returnNextSongID();
+
     initButton(next_video_id);
+
     //console.log('clicked ' + video_id);
 
-    setTimeout(updateTitle(), 50000);
+    updateTitle();
 }
 
 
 function updateTitle() {
-    document.querySelector('#curr_playing').innerText = player.getVideoData().title;
+    setTimeout( document.querySelector('#curr_playing').innerText = player.getVideoData().title, 5000)
     //console.log(player.getVideoData().title);
 }
 
@@ -115,10 +113,13 @@ function initButton(next_video_id) {
         player.pauseVideo();
     });
 
-    document.querySelector('#next').addEventListener('click', function() {
+    document.querySelector('#next').addEventListener('click', function(event) {
         playNextVideo(next_video_id);
+        event.target.removeEventListener(event.type, arguments.callee);
     }); 
 }
+
+
 
 
 
@@ -126,6 +127,12 @@ function initButton(next_video_id) {
 // Return the next song id in our playlist.
 let listenedCount = 0;
 async function returnNextSongID() {
+    if (listenedCount == 0)
+    {
+        // Raise the count since first song is playing
+        listenedCount ++;
+    }
+
     const response = await fetch('/api/fetch_video_id');
     if (!response.ok) {
         throw new Error('Failed to fetch video ID');
@@ -134,9 +141,16 @@ async function returnNextSongID() {
     const songValues = await response.json();
 
     // If list is finished, restart it.
-    if (songValues.length >= listenedCount){
+    if (listenedCount > songValues.json.length-1){
         listenedCount = 0;
     }
 
-    return video_id = songValues.json[listenedCount]['video_id']
+    const nextSong = songValues.json[listenedCount]['video_id']
+
+    // Raise the count since first song is playing
+    listenedCount ++;
+
+    //console.log(songValues);
+    //console.log(listenedCount);
+    return nextSong;
 }
