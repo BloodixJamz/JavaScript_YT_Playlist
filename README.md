@@ -1,4 +1,4 @@
-** Playlist manager using Youtube iframe and Google API in JavaScript. **
+# Playlist manager using Youtube iframe and Google API in JavaScript. 
 
 You can add songs using the Youtube Links and they get displayed into a table below the YT iframe.
 
@@ -6,28 +6,29 @@ You can add songs using the Youtube Links and they get displayed into a table be
 Dependencies : node.js, express, mysql and handlebars.
 
 
-***** You will need to create a 'config.js' file containing the following : *****
+## You will need to create a 'config.js' file containing the following : 
 
-
+	
+```javascript
 const config = {
-    userView: 'username',
-    passwordView: 'password',
-
-    userPriv: 'username',
-    passwordPriv: 'password',
-
-    server: 'server_name',
-    database: 'database_name',
-
-    apiKey: 'your_google_api_key',
+    userView: "username",
+    passwordView: "password",
+    userPriv: "username",
+    passwordPriv: "password",
+    server: "server_name",
+    database: "database_name",
+    apiKey: "your_google_api_key",
 };
 
-module.exports = { config };
+
+module.exports = { config }
+```
+
 
 
 *********************************************************************************
 
-***** You will need to create a SQL database containing the following : *****
+## You will need to create a SQL database containing the following : 
 
 Table : 'music_playlist' 
 
@@ -50,7 +51,7 @@ Rows :
 *****************************************************************************
 ------------------------------------------------------------------------------------------------
 
-***** What does it do ? *****
+## ***** What does it do ? *****
 
 - Your playlist is protected by an authentification system ( Implemented for test purpose ) but it is not separated for each users yet.
 
@@ -65,7 +66,7 @@ Rows :
 
 ------------------------------------------------------------------------------------------------
 
-***** Future implementations *****
+### ***** Future implementations *****
 
 - Maybe making it so that each users has their private playlist.
 
@@ -73,9 +74,9 @@ Rows :
 
 
 ------------------------------------------------------------------------------------------------
-***** LICENSE *****
+### ***** LICENSE *****
 
-Copyright (C) 2024  BloodixJamz
+**Copyright (C) 2024  BloodixJamz**
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published
